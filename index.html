@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Chips | Premium Burgers & Loaded Fries</title>
+     <link rel="icon" type="image/x-icon" href="bnc.png">
+    <!-- Google Fonts for Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========================================
+           VARIABLES & RESET
+        ======================================== */
+        :root {
+            --black: #0f0f0f;
+            --brown: #1a120d;
+            --gold: #d4a24c;
+            --cream: #f5e6c8;
+            --orange: #ff9f43;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(212, 162, 76, 0.15);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--cream);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 70px; /* Space for bottom nav */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Utility Classes */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .gold-text { color: var(--gold); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* ========================================
+           HERO SECTION
+        ======================================== */
+        #home {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(15, 15, 15, 0.4), var(--black)), 
+                        url('images/brick-wall-bg.jpg') center/cover;
+            overflow: hidden;
+        }
+
+        /* Cinematic Particles (Simple CSS implementation) */
+        .particles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background-image: radial-gradient(circle, var(--gold) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
+        }
+
+        .hero-logo {
+            max-width: 180px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(212, 162, 76, 0.5));
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { filter: drop-shadow(0 0 10px rgba(212, 162, 76, 0.3)); transform: scale(1); }
+            100% { filter: drop-shadow(0 0 25px rgba(212, 162, 76, 0.8)); transform: scale(1.02); }
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--cream);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--black);
+            border: none;
+            box-shadow: 0 4px 15px rgba(212, 162, 76, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 162, 76, 0.6);
+        }
+
+        /* ========================================
+           STICKY CATEGORY NAVBAR
+        ======================================== */
+        .category-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(212, 162, 76, 0.2);
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            gap: 15px;
+            padding-left: 20px;
+            padding-right: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-nav::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            background: transparent;
+            color: var(--cream);
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .cat-btn.active {
+            color: var(--black);
+            background: var(--gold);
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(212, 162, 76, 0.5);
+        }
+
+        /* ========================================
+           MENU SECTION
+        ======================================== */
+        #menu {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu-category {
+            margin-bottom: 50px;
+            scroll-margin-top: 80px;
+        }
+
+        .category-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media(min-width: 1024px) {
+            .menu-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .menu-card {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 162, 76, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .menu-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid var(--glass-border);
+            background: var(--brown); /* Fallback */
+        }
+
+        .menu-info { flex: 1; }
+
+        .menu-name {
+            font-size: 1.1rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .menu-price {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(212, 162, 76, 0.3);
+        }
+
+        .bestseller-badge {
+            position: absolute;
+            top: 0; right: 0;
+            background: var(--orange);
+            color: var(--black);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        /* ========================================
+           GALLERY, ABOUT, CONTACT
+        ======================================== */
+        section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            column-count: 2;
+            column-gap: 15px;
+        }
+        @media(min-width: 768px) { .gallery-grid { column-count: 3; } }
+
+        .gallery-item {
+            margin-bottom: 15px;
+            break-inside: avoid;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            transition: transform 0.5s ease;
+            background: var(--brown); /* Fallback placeholder */
+            min-height: 150px;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.8) sepia(0.2);
+        }
+
+        /* About */
+        #about p {
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--cream);
+            opacity: 0.9;
+        }
+
+        /* Contact */
+        .contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        @media(min-width: 768px) { .contact-cards { flex-direction: row; justify-content: center; } }
+
+        .contact-card {
+            padding: 25px;
+            text-align: center;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card i {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .contact-card:hover {
+            box-shadow: 0 0 20px rgba(212, 162, 76, 0.2);
+            border-color: rgba(212, 162, 76, 0.4);
+        }
+
+        /* ========================================
+           MOBILE BOTTOM NAV & FLOATING BTN
+        ======================================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+
+        .b-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--cream);
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .b-nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .b-nav-item.active, .b-nav-item:hover {
+            opacity: 1;
+            color: var(--gold);
+        }
+
+        .floating-order-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--black);
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(212, 162, 76, 0.6);
+            z-index: 999;
+            animation: floatBtn 2s infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes floatBtn {
+            0% { transform: translateY(0); box-shadow: 0 0 15px rgba(212, 162, 76, 0.4); }
+            100% { transform: translateY(-8px); box-shadow: 0 0 25px rgba(212, 162, 76, 0.8); }
+        }
+
+        @media(min-width: 768px) {
+            .bottom-nav { display: none; }
+            body { padding-bottom: 0; }
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+        footer {
+            background: var(--black);
+            border-top: 1px solid var(--glass-border);
+            padding: 30px 20px 80px 20px; /* Extra padding for bottom nav on mobile */
+            text-align: center;
+        }
+        
+        @media(min-width: 768px) {
+            footer { padding-bottom: 30px; }
+        }
+
+        .footer-text {
+            color: var(--cream);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .designer-link {
+            color: var(--gold);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            text-shadow: 0 0 5px rgba(212, 162, 76, 0.3);
+        }
+
+        .designer-link:hover {
+            color: var(--orange);
+            text-shadow: 0 0 10px rgba(255, 159, 67, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header id="home">
+        <div class="particles"></div>
+        <img src="bnc.png" alt="Burger Chips Logo" class="hero-logo reveal">
+        <h1 class="hero-title reveal">Premium Burgers<br>& Loaded Fries</h1>
+        <p class="hero-subtitle reveal">Crafted Fresh • Served Hot • Made With Passion</p>
+        <div class="hero-btns reveal">
+            <a href="#menu" class="btn btn-primary">View Menu</a>
+            <a href="#contact" class="btn btn-outline">Contact Us</a>
+        </div>
+    </header>
+
+    <!-- MOBILE STICKY NAVBAR -->
+    <nav class="category-nav" id="categoryNav">
+        <!-- Buttons injected via JS -->
+    </nav>
+
+    <!-- MENU SECTION -->
+    <section id="menu">
+        <div class="section-header reveal">
+            <h2>Our Menu</h2>
+            <p>Explore our premium handcrafted selection</p>
+        </div>
+        <div id="menuContainer">
+            <!-- Menu categories and items injected via JS -->
+        </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section id="gallery">
+        <div class="section-header reveal">
+            <h2>Gallery</h2>
+            <p>The Burger Chips Experience</p>
+        </div>
+        <div class="gallery-grid reveal">
+            <div class="gallery-item"><img src="img4.jpeg" alt="Interior"></div>
+            <div class="gallery-item"><img src="cc.png" alt="Burger"></div>
+            <div class="gallery-item"><img src="pfries.jpeg" alt="Fries"></div>
+            <div class="gallery-item"><img src="qeema1.png" alt="Snacks"></div>
+            <div class="gallery-item"><img src="img3.jpeg" alt="Ambiance"></div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="glass reveal" style="margin-top: 40px; margin-bottom: 40px;">
+        <div class="section-header">
+            <h2>Our Story</h2>
+        </div>
+        <p>Burger Chips serves handcrafted burgers, loaded fries, cheesy snacks, and premium fast-food experiences inside a cozy modern atmosphere.</p>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+        <div class="section-header reveal">
+            <h2>Connect With Us</h2>
+        </div>
+        <div class="contact-cards reveal">
+            <a href="mailto:burgernchips@gmail.com" class="contact-card glass">
+                <i class="fas fa-envelope"></i>
+                <h3>Email</h3>
+                <p>burgernnchips@gmail.com</p>
+            </a>
+            <a href="https://www.instagram.com/burgernnchips/" target="_blank" class="contact-card glass">
+                <i class="fab fa-instagram"></i>
+                <h3>Restaurant</h3>
+                <p>@burgernnchips</p>
+            </a>
+            <a href="https://www.instagram.com/sahil_noman_/" target="_blank" class="contact-card glass">
+                <i class="fas fa-paint-brush"></i>
+                <h3>Designer</h3>
+                <p>@sahil_noman_</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p class="footer-text">
+            &copy; 2026 Burger Chips. All Rights Reserved.<br><br>
+            Designed by <a href="https://www.instagram.com/sahil_noman_/" target="_blank" class="designer-link">Sahil Noman</a>
+        </p>
+    </footer>
+
+    <!-- MOBILE FLOATING BUTTON -->
+    <a href="#menu" class="floating-order-btn">
+        <i class="fas fa-shopping-bag"></i>
+    </a>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <a href="#home" class="b-nav-item active"><i class="fas fa-home"></i>Home</a>
+        <a href="#menu" class="b-nav-item"><i class="fas fa-hamburger"></i>Menu</a>
+        <a href="#gallery" class="b-nav-item"><i class="fas fa-images"></i>Gallery</a>
+        <a href="#about" class="b-nav-item"><i class="fas fa-info-circle"></i>About</a>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        /* ========================================
+           MENU DATA (UPDATE IMAGES HERE)
+        ======================================== */
+        const menuData = [
+            {
+                category: "Jr Burger",
+                items: [
+                    { name: "Jr Aloo Tikki", price: 69, desc: "Classic crisp potato patty", image: "ca.png" },
+                    { name: "Jr Crispy Chicken", price: 79, desc: "Crunchy chicken delight", image: "cc.png" },
+                    { name: "Jr Fried Chicken", price: 109, desc: "Golden fried goodness", image: "bigfried.jpeg" },
+                    { name: "Jr Smash Chicken", price: 109, desc: "Smashed juicy chicken", image: "jrs.png" },
+                    { name: "Jr Smash Mutton", price: 149, desc: "Premium smashed mutton", image: "jrs.png" }
+                ]
+            },
+            {
+                category: "Big Burger",
+                items: [
+                    { name: "Crispy Veg Burger", price: 99, desc: "Double crisp veg patty", image: "ca.png" },
+                    { name: "Crispy Chicken Burger", price: 129, desc: "Large crunchy chicken", image: "cc.png" },
+                    { name: "Paneer Grilled", price: 169, desc: "Rich grilled paneer", image: "paneer.png" },
+                    { name: "Big Fried Chicken", price: 189, desc: "Ultimate fried chicken", image: "bigfried.jpeg", bestSeller: true },
+                    { name: "Smash Chicken 2.0", price: 189, desc: "Double smashed chicken", image: "smash.png", bestSeller: true },
+                    { name: "Smash Mutton 2.0", price: 249, desc: "Double premium mutton", image: "smash.png" }
+                ]
+            },
+            {
+                category: "Fries",
+                items: [
+                    { name: "French Fries", price: 89, desc: "Classic salted", image: "friese.jpeg" },
+                    { name: "Peri Peri Fries", price: 99, desc: "Spicy & tangy", image: "pfries.jpeg" },
+                    { name: "Cheesy French Fries", price: 119, desc: "Loaded with liquid cheese", image: "https://b.zmtcdn.com/data/dish_photos/a90/d020dd49b7f9df6910a64b8d14828a90.jpeg?fit=around|130:130&crop=130:130;*,*" }
+                ]
+            },
+            {
+                category: "Chips",
+                items: [
+                    { name: "Classic Salted", price: 69, desc: "Thin & crispy", image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2026/3/25/b17b5c7d-3356-479f-8f8a-ff9d5619b199_47bc5b89-3327-4825-884d-108d0a10e599.jpg" },
+                    { name: "Peri Peri", price: 79, desc: "Spicy potato chips", image: "perichip.jpeg" },
+                    { name: "Garlic N Cheese", price: 89, desc: "Rich flavor combo", image: "perichip.jpeg" }
+                ]
+            },
+            {
+                category: "Loaded Chips",
+                items: [
+                    { name: "Loaded Paneer", price: 89, desc: "Chips topped with paneer & sauces", image: "paneers.png" },
+                    { name: "Loaded Chicken", price: 99, desc: "Chicken chunks, cheese & chips", image: "loaded_chicken.png" },
+                    { name: "Loaded Mutton", price: 139, desc: "Premium mutton loaded chips", image: "loaded_mutton.png" }
+                ]
+            },
+            {
+                category: "Appetizers",
+                items: [
+                    { name: "Chicken Nuggets", price: 119, desc: "Bite-sized crispiness", image: "Nuggets.png" },
+                    { name: "Chicken Wings", price: 129, desc: "Juicy & flavorful", image: "wing.png" },
+                    { name: "Chicken Strips", price: 139, desc: "Tender chicken strips", image: "strip.png" },
+                    { name: "15pcs Bucket", price: 349, desc: "Ultimate sharing bucket", image: "bucket.png" }
+                ]
+            },
+            {
+                category: "Steam Momos",
+                items: [
+                    { name: "Veg Momos", price: 100, desc: "Fresh steamed veggies", image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2026/5/7/ca9d309b-c825-4890-b67d-a1c83cc667da_55cb4214-e35d-41c1-9d81-e4ef8e3662f9.jpeg" },
+                    { name: "Chicken Momos", price: 160, desc: "Juicy chicken mince", image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2026/5/7/33e42fe0-b0a8-40a9-bf08-9f75de48b92d_f5e1a6c9-b093-4bf1-9a96-7c7fc17c6647.png" },
+                    { name: "Fried Veg Momos", price: 120, desc: "Crispy fried veg", image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2026/5/7/605e3047-6887-4c65-adbb-6e1e74232bfe_5ce8def1-e3b6-43bc-9935-f7b030d810a9.png" },
+                    { name: "Fried Chicken Momos", price: 180, desc: "Crispy fried chicken", image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2026/5/7/7d7f0594-4413-4163-b1e9-1729de06b203_e5fe222d-3c89-4995-8f88-d39c374eb4b5.jpeg" }
+                ]
+            },
+            {
+                category: "Drinks",
+                items: [
+                    { name: "Campa 500ml", price: 20, desc: "Refreshing cola", image: "campa.jfif" },
+                    { name: "Coke", price: 40, desc: "Chilled classic", image: "cock.jfif" },
+                    { name: "Thumps Up", price: 40, desc: "Taste the thunder", image: "up.jfif" },
+                    { name: "Milky Mango", price: 99, desc: "Rich mango shake", image: "mango.png" },
+                    { name: "Cold Coffee", price: 99, desc: "Premium blended coffee", image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/FOOD_CATALOG/IMAGES/CMS/2026/3/25/19ded619-0c75-4ed4-bf00-6a79d67a8434_f5968ecb-3093-4162-8851-aafd93c091d4.jpg" },
+                    { name: "Nimbu Sharbat", price: 99, desc: "Fresh lemon cooler", image: "nimbu.png" }
+                ]
+            }
+        ];
+
+        /* ========================================
+           RENDER MENU & CATEGORIES
+        ======================================== */
+        const categoryNav = document.getElementById('categoryNav');
+        const menuContainer = document.getElementById('menuContainer');
+
+        function renderMenu() {
+            menuData.forEach((cat, index) => {
+                // 1. Create Category Buttons
+                const btn = document.createElement('button');
+                btn.className = `cat-btn ${index === 0 ? 'active' : ''}`;
+                btn.textContent = cat.category;
+                btn.onclick = () => scrollToCategory(cat.category);
+                categoryNav.appendChild(btn);
+
+                // 2. Create Menu Sections
+                const section = document.createElement('div');
+                section.className = 'menu-category reveal';
+                section.id = `cat-${cat.category.replace(/\s+/g, '-')}`;
+
+                const title = document.createElement('h3');
+                title.className = 'category-title';
+                title.textContent = cat.category;
+                section.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'menu-grid';
+
+                cat.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'menu-card glass';
+                    
+                    let badgeHTML = item.bestSeller ? `<div class="bestseller-badge">BEST SELLER</div>` : '';
+                    
+                    // The img src is now pointing to the "image" property we added above
+                    card.innerHTML = `
+                        ${badgeHTML}
+                        <img src="${item.image}" alt="${item.name}" class="menu-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzFhMTIwZCIvPjwvc3ZnPg=='">
+                        <div class="menu-info">
+                            <h4 class="menu-name">${item.name}</h4>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 5px;">${item.desc}</p>
+                            <div class="menu-price">₹${item.price}</div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                menuContainer.appendChild(section);
+            });
+        }
+
+        // Smooth scroll to category
+        function scrollToCategory(categoryName) {
+            const targetId = `cat-${categoryName.replace(/\s+/g, '-')}`;
+            const element = document.getElementById(targetId);
+            if(element) {
+                const headerOffset = 70;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        /* ========================================
+           SCROLL SPY & ANIMATIONS
+        ======================================== */
+        function initScrollEffects() {
+            const sections = document.querySelectorAll('.menu-category');
+            const navBtns = document.querySelectorAll('.cat-btn');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.textContent.replace(/\s+/g, '-') === current.replace('cat-', '')) {
+                        btn.classList.add('active');
+                        btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+                    }
+                });
+            });
+
+            const reveals = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(reveal => revealObserver.observe(reveal));
+            
+            const bottomNavItems = document.querySelectorAll('.b-nav-item');
+            bottomNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    bottomNavItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenu();
+            setTimeout(initScrollEffects, 100);
+        });
+
+    </script>
+</body>
+</html>
